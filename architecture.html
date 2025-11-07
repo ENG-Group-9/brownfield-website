@@ -76,6 +76,44 @@
         text-align: left;
       }
 
+      .section {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+
+      .section-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        font-family: "JetBrains Mono", monospace;
+        letter-spacing: 0.02em;
+        color: #fde68a;
+        margin-bottom: 0.5rem;
+      }
+
+      .diagrams-gallery {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+      }
+
+      .diagrams-gallery img {
+        width: auto;
+        object-fit: contain;
+        border: 1px solid #475569;
+        border-radius: 0.375rem;
+      }
+
+      .diagrams-gallery img:first-child {
+        height: 300px;
+      }
+
+      .diagrams-gallery img:last-child {
+        height: 200px;
+      }
+
       .entry {
         margin-bottom: 1.5rem;
         padding-left: 0.75rem;
@@ -111,12 +149,6 @@
         margin: 0.25rem 0;
         color: #cbd5e1;
       }
-
-      @media (min-width: 768px) {
-        .page-title {
-          font-size: 2.5rem;
-        }
-      }
     </style>
   </head>
   <body>
@@ -142,105 +174,129 @@
       <div class="content">
         <h1 class="page-title">ARCHITECTURE</h1>
 
-        <div class="entry">
-          <h4>
-            <a href="#" rel="noopener noreferrer"> October 9th, 2025 </a>
-          </h4>
-          <ul>
-            <li>First project set up, basic plan of what to implement</li>
-          </ul>
-        </div>
+        <!-- Architecture Diagrams Section -->
+        <section class="section">
+          <h2 class="section-title">Architecture Diagrams</h2>
+          <div class="diagrams-gallery">
+            <img
+              src="maze_tile_class_diagram.jpg"
+              alt="Maze Tile Class Diagram"
+            />
+            <img
+              src="event_inheritance_class_diagram.jpg"
+              alt="Event Inheritance Class Diagram"
+            />
+          </div>
+        </section>
 
-        <div class="entry">
-          <h4>
-            <a href="october16.pdf" target="_blank" rel="noopener noreferrer">
-              October 16, 2025
-            </a>
-          </h4>
-          <ul>
-            <li>
-              Added structural class diagram, laying out in detail how core
-              classes (Game, Timer, Screen, Sprite, Player, Dean, Item, Event)
-              interact and satisfy requirements (FR_SCORING, FR_PAUSING,
-              UR_TIME, UR_UI).
-            </li>
-          </ul>
-        </div>
+        <!-- Architecture Changes Section -->
+        <section class="section">
+          <h2 class="section-title">Architecture Changes</h2>
 
-        <div class="entry">
-          <h4>
-            <a href="october23.pdf" target="_blank" rel="noopener noreferrer">
-              October 23, 2025
-            </a>
-          </h4>
-          <ul>
-            <li>
-              New classes/components and roles or expanded relationships: Game:
-              main class; checks player location to trigger events, Score:
-              influenced by events (and possibly timer), Event: triggered when
-              player is on specific tile; affects score, Inventory: stores
-              items, Dean: appears at end if time runs out, Maze: placeholder
-              for possible procedural generation, Tile: walls/paths with
-              textures; some trigger events; Game accesses tiles (abstracted)
-            </li>
-            <li>
-              Relationship clarifications: Timer can modify score, Items reside
-              on tiles and move to inventory
-            </li>
-          </ul>
-        </div>
+          <div class="entry">
+            <h4>
+              <a href="#" rel="noopener noreferrer">
+                October 9th, 2025 (no file yet)
+              </a>
+            </h4>
+            <ul>
+              <li>First project set up, basic plan of what to implement</li>
+            </ul>
+          </div>
 
-        <div class="entry">
-          <h4>
-            <a href="october30.pdf" target="_blank" rel="noopener noreferrer">
-              October 30, 2025
-            </a>
-          </h4>
-          <ul>
-            <li>
-              Added paragraph explaining the design was influenced by the
-              pipeline architecture.
-            </li>
-            <li>Full write-up replacing bullet points</li>
-            <li>
-              Requirement traceability added with IDs: FR_MAP_CREATION, UR_TIME,
-              UR_UI, FR_SCORING, etc
-            </li>
-            <li>
-              Pipeline-architecture influence explained (inputs → components →
-              outputs)
-            </li>
-            <li>Detailed class roles and relationships fleshed out:</li>
-            <li>
-              Game holds int[] maze (pre-filled), orchestrates Timer/Events
-            </li>
-            <li>Timer tracks time, pause/play, affects Score</li>
-            <li>Screen aggregates visuals; uses Sprite assets</li>
-            <li>
-              Sprite stores location/speed; handles input; used by Player/Dean
-            </li>
-            <li>Added design process/history section with figures</li>
-            <li>State diagram still only mentioned briefly</li>
-          </ul>
-        </div>
+          <div class="entry">
+            <h4>
+              <a href="october16.pdf" target="_blank" rel="noopener noreferrer">
+                October 16, 2025 (click to view)
+              </a>
+            </h4>
+            <ul>
+              <li>
+                Added structural class diagram, laying out in detail how core
+                classes (Game, Timer, Screen, Sprite, Player, Dean, Item, Event)
+                interact and satisfy requirements (FR_SCORING, FR_PAUSING,
+                UR_TIME, UR_UI).
+              </li>
+            </ul>
+          </div>
 
-        <div class="entry">
-          <h4>
-            <a href="november6.pdf" target="_blank" rel="noopener noreferrer">
-              November 6, 2025
-            </a>
-          </h4>
-          <ul>
-            <li>
-              Major expansion of behavioural/state-diagram section: Event-driven
-              rationale for using states, Timer substate: running ↔ paused →
-              expired; reacts to pauseGame/resumeGame/timeout, Event propagation
-              to parent "playing" state; higher-level transitions: playing,
-              paused, game over, Event propagation to parent "playing" state;
-              higher-level transitions: playing, paused, game over.
-            </li>
-          </ul>
-        </div>
+          <div class="entry">
+            <h4>
+              <a href="october23.pdf" target="_blank" rel="noopener noreferrer">
+                October 23, 2025 (click to view)
+              </a>
+            </h4>
+            <ul>
+              <li>
+                New classes/components and roles or expanded relationships:
+                Game: main class; checks player location to trigger events,
+                Score: influenced by events (and possibly timer), Event:
+                triggered when player is on specific tile; affects score,
+                Inventory: stores items, Dean: appears at end if time runs out,
+                Maze: placeholder for possible procedural generation, Tile:
+                walls/paths with textures; some trigger events; Game accesses
+                tiles (abstracted)
+              </li>
+              <li>
+                Relationship clarifications: Timer can modify score, Items
+                reside on tiles and move to inventory
+              </li>
+            </ul>
+          </div>
+
+          <div class="entry">
+            <h4>
+              <a href="october30.pdf" target="_blank" rel="noopener noreferrer">
+                October 30, 2025 (click to view)
+              </a>
+            </h4>
+            <ul>
+              <li>
+                Added paragraph explaining the design was influenced by the
+                pipeline architecture.
+              </li>
+              <li>Full write-up replacing bullet points</li>
+              <li>
+                Requirement traceability added with IDs: FR_MAP_CREATION,
+                UR_TIME, UR_UI, FR_SCORING, etc
+              </li>
+              <li>
+                Pipeline-architecture influence explained (inputs → components →
+                outputs)
+              </li>
+              <li>Detailed class roles and relationships fleshed out:</li>
+              <li>
+                Game holds int[] maze (pre-filled), orchestrates Timer/Events
+              </li>
+              <li>Timer tracks time, pause/play, affects Score</li>
+              <li>Screen aggregates visuals; uses Sprite assets</li>
+              <li>
+                Sprite stores location/speed; handles input; used by Player/Dean
+              </li>
+              <li>Added design process/history section with figures</li>
+              <li>State diagram still only mentioned briefly</li>
+            </ul>
+          </div>
+
+          <div class="entry">
+            <h4>
+              <a href="november6.pdf" target="_blank" rel="noopener noreferrer">
+                November 6, 2025 (click to view)
+              </a>
+            </h4>
+            <ul>
+              <li>
+                Major expansion of behavioural/state-diagram section:
+                Event-driven rationale for using states, Timer substate: running
+                ↔ paused → expired; reacts to pauseGame/resumeGame/timeout,
+                Event propagation to parent "playing" state; higher-level
+                transitions: playing, paused, game over, Event propagation to
+                parent "playing" state; higher-level transitions: playing,
+                paused, game over.
+              </li>
+            </ul>
+          </div>
+        </section>
       </div>
     </div>
   </body>
