@@ -107,18 +107,11 @@
       }
 
       .diagrams-gallery img {
+        height: 200px;
         width: auto;
         object-fit: contain;
         border: 1px solid #475569;
         border-radius: 0.375rem;
-      }
-
-      .diagrams-gallery img:first-child {
-        height: 300px;
-      }
-
-      .diagrams-gallery img:last-child {
-        height: 200px;
       }
 
       .entry {
@@ -135,17 +128,6 @@
         margin-bottom: 0.5rem;
       }
 
-      .entry h4 a {
-        color: #fbbf24;
-        text-decoration: none;
-        transition: all 0.3s;
-      }
-
-      .entry h4 a:hover {
-        color: #f59e0b;
-        text-decoration: underline;
-      }
-
       .entry ul {
         padding-left: 1rem;
         margin-left: 0.25rem;
@@ -155,6 +137,19 @@
       .entry ul li {
         margin: 0.25rem 0;
         color: #cbd5e1;
+      }
+
+      .diagram a {
+        color: white;
+        text-decoration: none;
+        transition: all 0.3s;
+        font-style: italic;
+      }
+
+      .diagram a:hover {
+        color: #f59e0b;
+        text-decoration: underline;
+        font-style: italic;
       }
     </style>
   </head>
@@ -184,126 +179,106 @@
         <!-- Architecture Diagrams Section -->
         <section class="section">
           <h2 class="section-title">Architecture Diagrams</h2>
-          <h3 class="section-subtitle">(parts of previous class diagram)</h3>
+          <h3 class="section-subtitle">(list of class diagram' versions)</h3>
           <div class="diagrams-gallery">
             <img
-              src="maze_tile_class_diagram.jpg"
-              alt="Maze Tile Class Diagram"
+              src="detailed_class_diagram_1.jpg"
             />
             <img
-              src="event_inheritance_class_diagram.jpg"
-              alt="Event Inheritance Class Diagram"
+              src="detailed_class_diagram_2.jpg"
+            />
+            <img
+              src="simple_class_diagram_1.jpg"
             />
           </div>
+          <div class="diagram">
+            <a 
+            href="classDiagrams.html"
+            rel="noopener noreferrer"
+            target="_blank">
+                (click to open in new tab)
+            </a>
+        </div>
         </section>
 
         <!-- Architecture Changes Section -->
         <section class="section">
-          <h2 class="section-title">Architecture Changes</h2>
+          <h2 class="section-title">Class Diagram Changes</h2>
 
           <div class="entry">
             <h4>
-              <a href="#" rel="noopener noreferrer">
-                October 9th, 2025 (no file yet)
-              </a>
-            </h4>
-            <ul>
-              <li>First project set up, basic plan of what to implement</li>
-            </ul>
-          </div>
-
-          <div class="entry">
-            <h4>
-              <a href="october16.pdf" target="_blank" rel="noopener noreferrer">
-                October 16, 2025 (click to view)
-              </a>
+              November 28th, 2025
             </h4>
             <ul>
               <li>
-                Added structural class diagram, laying out in detail how core
-                classes (Game, Timer, Screen, Sprite, Player, Dean, Item, Event)
-                interact and satisfy requirements (FR_SCORING, FR_PAUSING,
-                UR_TIME, UR_UI).
+                Recieved the developed project, went through the code creating a full
+                class diagram of the entire game, felt neccessary to layout the game in a human-friendly
+                format so implementation begins smoother
               </li>
             </ul>
           </div>
 
           <div class="entry">
             <h4>
-              <a href="october23.pdf" target="_blank" rel="noopener noreferrer">
-                October 23, 2025 (click to view)
-              </a>
+              December 5th, 2025
             </h4>
             <ul>
               <li>
-                New classes/components and roles or expanded relationships:
-                Game: main class; checks player location to trigger events,
-                Score: influenced by events (and possibly timer), Event:
-                triggered when player is on specific tile; affects score,
-                Inventory: stores items, Dean: appears at end if time runs out,
-                Maze: placeholder for possible procedural generation, Tile:
-                walls/paths with textures; some trigger events; Game accesses
-                tiles (abstracted)
+                Added new classes to the diagram that have been added or plan to be added, dependencies that will
+                be required have been highlighted. Additionally, cleaned up dependencies making the diagram look more clean
+                and readable
               </li>
               <li>
-                Relationship clarifications: Timer can modify score, Items
-                reside on tiles and move to inventory
+                Achievements - example achievements, being challenges for the player to achieve, have been added to the
+                diagram as well as an example contianing methods that it may have
+              </li>
+              <li>
+                Achievement Popup Screen - a popup ui when the player completes an achievement, contains dependencies to
+                the achivement event and achievement class, changing the displayed texture depending on the achievement completed
+              </li>
+              <li>
+                Achievement Completion Screen - a screen accessible from the main menu displaying achievement progress, contains
+                a list of all achievements in the game as well as if they are completed or not
+              </li>
+              <li>
+                Leaderboard Screen - another screen accessible from the main menu displaying the previous top 5 scores that the game
+                has seen, dependent on the menu screen as well as the win event
               </li>
             </ul>
           </div>
 
           <div class="entry">
             <h4>
-              <a href="october30.pdf" target="_blank" rel="noopener noreferrer">
-                October 30, 2025 (click to view)
-              </a>
+              December 12th, 2025
             </h4>
             <ul>
               <li>
-                Added paragraph explaining the design was influenced by the
-                pipeline architecture.
+                Simplified the class diagram for the arch doc, abstracting most classes to stress the dependencies rather than
+                specific classes, only key variables / methods are accounted for highlighing only relevant
+                information
               </li>
-              <li>Full write-up replacing bullet points</li>
-              <li>
-                Requirement traceability added with IDs: FR_MAP_CREATION,
-                UR_TIME, UR_UI, FR_SCORING, etc
-              </li>
-              <li>
-                Pipeline-architecture influence explained (inputs → components →
-                outputs)
-              </li>
-              <li>Detailed class roles and relationships fleshed out:</li>
-              <li>
-                Game holds int[] maze (pre-filled), orchestrates Timer/Events
-              </li>
-              <li>Timer tracks time, pause/play, affects Score</li>
-              <li>Screen aggregates visuals; uses Sprite assets</li>
-              <li>
-                Sprite stores location/speed; handles input; used by Player/Dean
-              </li>
-              <li>Added design process/history section with figures</li>
-              <li>State diagram still only mentioned briefly</li>
             </ul>
           </div>
 
           <div class="entry">
             <h4>
-              <a href="november6.pdf" target="_blank" rel="noopener noreferrer">
-                November 6, 2025 (click to view)
-              </a>
+              December 17th, 2025
             </h4>
             <ul>
               <li>
-                Major expansion of behavioural/state-diagram section:
-                Event-driven rationale for using states, Timer substate: running
-                ↔ paused → expired; reacts to pauseGame/resumeGame/timeout,
-                Event propagation to parent "playing" state; higher-level
-                transitions: playing, paused, game over, Event propagation to
-                parent "playing" state; higher-level transitions: playing,
-                paused, game over.
+                Final version of the class diagram with all proposed features of the game after evaluation from feeback given
+              </li>
+              <li>
+                Achievement example classes have been removed due to them being generic and having almost identical proporties,
+                however all dependencies are now displayed from the abstract class achievement
+              </li>
+              <li>
+                More generic events have been added with their dependencies displayed, an unaccounted for win screen has now been
+                addressed
               </li>
             </ul>
           </div>
+          
         </section>
       </div>
     </div>
