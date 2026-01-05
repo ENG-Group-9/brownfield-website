@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/x-icon" href="/public/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Yetti - Weekly Progress</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&family=IBM+Plex+Mono:wght@300;400;500;600;700&family=JetBrains+Mono:wght@100..800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+        line-height: 1.5;
+        font-weight: 400;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        color: #e2e8f0;
+        background-color: #0f172a;
+      }
+
+      .container {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+        padding: 3rem 1.25rem 4rem;
+      }
+
+      .back-button {
+        align-self: flex-start;
+        margin-left: 1rem;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 1.0625rem;
+        letter-spacing: 0.05em;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #ffffff;
+        text-decoration: none;
+        transition: all 0.3s;
+      }
+
+      .back-button:hover {
+        color: #f59e0b;
+      }
+
+      .icon-chevron {
+        width: 1.125rem;
+        height: 1.125rem;
+      }
+
+      .content {
+        width: 100%;
+        max-width: 56rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+
+      .page-title {
+        font-size: 2.25rem;
+        font-weight: 700;
+        font-family: "JetBrains Mono", monospace;
+        letter-spacing: 0.02em;
+        text-align: left;
+      }
+
+      .intro {
+        font-family: "Geist", sans-serif;
+        color: #cbd5e1;
+        font-size: 1rem;
+      }
+
+      .nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+      }
+
+      .nav a {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.9375rem;
+        color: #fcd34d;
+        text-decoration: none;
+        border: 1px solid #475569;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+        transition: all 0.2s;
+      }
+
+      .nav a:hover {
+        border-color: #b45309;
+        color: #f59e0b;
+      }
+
+      .section-card {
+        background-color: rgba(30, 41, 59, 0.5);
+        border: 1px solid #334155;
+        border-left: 4px solid #b45309;
+        border-radius: 0.375rem;
+        padding: 1rem 1rem 0.75rem;
+        backdrop-filter: blur(4px);
+      }
+
+      .section-title {
+        font-family: "Geist", sans-serif;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #fde68a;
+        margin-bottom: 0.5rem;
+      }
+
+      .entry {
+        margin-bottom: 0.75rem;
+        padding-left: 0.75rem;
+        border-left: 2px solid #475569;
+      }
+
+      .entry h4 {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #fbbf24;
+        margin-bottom: 0.25rem;
+      }
+
+      .entry ul {
+        padding-left: 1rem;
+        margin-left: 0.25rem;
+        list-style: disc;
+      }
+
+      .entry ul li {
+        margin: 0.125rem 0;
+        color: #cbd5e1;
+      }
+
+      .footer-note {
+        margin-top: 0.5rem;
+        font-size: 0.9375rem;
+        color: #94a3b8;
+        font-family: "Geist", sans-serif;
+      }
+
+      @media (min-width: 768px) {
+        .page-title {
+          font-size: 2.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <a href="deliverables.html" class="back-button">
+        <svg
+          class="icon-chevron"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="m15 18-6-6 6-6"></path>
+        </svg>
+        BACK
+      </a>
+
+      <div class="content">
+        <h1 class="page-title">WEEKLY PLAN & PROGRESS</h1>
+
+        <div class="nav">
+          <a href="#systematic-plan">Systematic plan</a>
+          <a href="#risk-assessment">Risk assessment</a>
+          <a href="#programming">Programming</a>
+          <a href="#architecture">Architecture</a>
+          <a href="#requirements">Requirements</a>
+          <a href="#testing">Testing</a>
+          <a href="#continuous-integration">Continuous integration</a>
+          <a href="#user-evaluation">User evaluation</a>
+        </div>
+
+        <!-- Systematic plan -->
+        <section id="systematic-plan" class="section-card">
+          <h2 class="section-title">Systematic plan</h2>
+
+          <div class="entry">
+            <h4>Milestones and dates (A2 due Mon 12 Jan 2026)</h4>
+            <ul>
+              <li>
+                Iteration 1 (17-23 Nov): Establish changelog and documentation method, update requirements for A2, set plan
+              </li>
+              <li>
+                Iteration 2 (24-30 Nov): Rework architecture, set up CI workflow and testing
+              </li>
+              <li>
+                Iteration 3 (01-07 Dec): Implement requirements/architecture changes, create user evaluation process/doc
+              </li>
+              <li>
+                Iteration 4 (08-14 Dec): User evaluation session, complete UE doc, update architecture/plan to reflect feedback
+              </li>
+              <li>
+                Iteration 5 (15-21 Dec): Begin implementation refresh from evaluation
+              </li>
+              <li>
+                Iteration 6 (29-04 Jan): Complete reports for implementation, testing
+              </li>
+              <li>
+                Iteration 7 (05-11 Jan): Final polish, package, PDF for all deliverables, create presentation
+              </li>
+            </ul>
+          </div>
+
+          <div class="entry">
+            <h4>Key tasks with dates, priorities, dependencies</h4>
+            <ul>
+              <li>
+                <strong>T001</strong> Risk assessment and mitigation
+                <ul>
+                  <li>Start: 1 Oct • Finish: 28 Oct</li>
+                  <li>
+                    Dependencies: none • Output: Risk1.pdf, risk register (IDs,
+                    likelihood/impact, mitigation)
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+
+          <div class="entry">
+            <h4>Dependencies summary</h4>
+            <ul>
+              <li>See progress1.html for format of this</li>
+            </ul>
+          </div>
+
+          <div class="entry">
+            <h4>Plan evolution (high‑level)</h4>
+            <ul>
+              <li>See progress1.html for format of this</li>
+            </ul>
+          </div>
+
+          <div class="entry">
+            <h4>Priorities (MoSCoW)</h4>
+            <ul>
+              <li>
+                TEXT HERE
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- Risk assessment -->
+        <section id="risk-assessment" class="section-card">
+          <h2 class="section-title">Risk assessment</h2>
+
+          <div class="entry">
+            <h4>Initial start: DATE</h4>
+            <ul>
+              <li>TEXT HERE</li>
+            </ul>
+          </div>
+
+          <div class="entry">
+            <h4>Progress by: DATE</h4>
+            <ul>
+              <li>
+                TEXT HERE
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- Programming -->
+        <section id="programming" class="section-card">
+          <h2 class="section-title">Programming</h2>
+
+          <div class="entry">
+            <h4>Initial start: DATE</h4>
+            <ul>
+              <li>
+                TEXT HERE
+              </li>
+            </ul>
+          </div>
+
+          <div class="entry">
+            <h4>Progress by: DATE</h4>
+            <ul>
+              <li>TEXT HERE</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- Architecture -->
+        <section id="architecture" class="section-card">
+          <h2 class="section-title">Architecture</h2>
+
+          <div class="entry">
+            <h4>Initial start: DATE</h4>
+            <ul>
+              <li>TEXT HERE</li>
+            </ul>
+          </div>
+
+          <div class="entry">
+            <h4>Progress by: DATE</h4>
+            <ul>
+              <li>
+                TEXT HERE
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- Requirements -->
+        <section id="requirements" class="section-card">
+          <h2 class="section-title">Requirements</h2>
+
+          <div class="entry">
+            <h4>Initial start: DATE</h4>
+            <ul>
+              <li>
+                TEXT HERE
+              </li>
+            </ul>
+          </div>
+
+          <div class="entry">
+            <h4>Progress by: DATE</h4>
+            <ul>
+              <li>
+                TEXT HERE
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- Testing -->
+        <section id="testing" class="section-card">
+          <h2 class="section-title">Testing</h2>
+
+          <div class="entry">
+            <h4>Initial start: DATE</h4>
+            <ul>
+              <li>TEXT HERE</li>
+            </ul>
+          </div>
+
+          <div class="entry">
+            <h4>Progress by: DATE</h4>
+            <ul>
+              <li>
+                TEXT HERE
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- Continuous integration -->
+        <section id="continuous-integration" class="section-card">
+          <h2 class="section-title">Continuous integration</h2>
+
+          <div class="entry">
+            <h4>Initial start: DATE</h4>
+            <ul>
+              <li>TEXT HERE</li>
+            </ul>
+          </div>
+
+          <div class="entry">
+            <h4>Progress by: DATE</h4>
+            <ul>
+              <li>
+                TEXT HERE
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- User evaluation -->
+        <section id="user-evaluation" class="section-card">
+          <h2 class="section-title">User evaluation</h2>
+
+          <div class="entry">
+            <h4>Initial start: DATE</h4>
+            <ul>
+              <li>TEXT HERE</li>
+            </ul>
+          </div>
+
+          <div class="entry">
+            <h4>Progress by: DATE</h4>
+            <ul>
+              <li>
+                TEXT HERE
+              </li>
+            </ul>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </body>
+</html>
