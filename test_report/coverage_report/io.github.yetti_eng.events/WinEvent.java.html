@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>WinEvent.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">headless</a> &gt; <a href="index.source.html" class="el_package">io.github.yetti_eng.events</a> &gt; <span class="el_source">WinEvent.java</span></div><h1>WinEvent.java</h1><pre class="source lang-java linenums">package io.github.yetti_eng.events;
+
+import io.github.yetti_eng.EventCounter;
+import io.github.yetti_eng.LeaderboardManager;
+import io.github.yetti_eng.YettiGame;
+import io.github.yetti_eng.entities.Item;
+import io.github.yetti_eng.entities.Player;
+import io.github.yetti_eng.screens.GameScreen;
+import io.github.yetti_eng.screens.NameInputScreen;
+import io.github.yetti_eng.screens.WinScreen;
+
+public class WinEvent extends Event {
+
+    private final LeaderboardManager leaderboardManager;
+
+    // NEW (AS2): Add constructor to pass objects for unit testing
+<span class="fc" id="L17">    public WinEvent(LeaderboardManager leaderboardManager) {</span>
+<span class="fc" id="L18">        this.leaderboardManager = leaderboardManager;</span>
+<span class="fc" id="L19">    }</span>
+
+    @Override
+    public boolean activate(final GameScreen screen, Player player, Item item) {
+
+<span class="fc" id="L24">        YettiGame game = screen.getGame();</span>
+        
+        // NEW: Calculate Final Score (Assessment 2 Requirement: UR_SCORING)
+<span class="fc" id="L27">        int timeRemaining = game.timer.getRemainingTime();</span>
+<span class="fc" id="L28">        int positive = EventCounter.getPositiveCount();</span>
+<span class="fc" id="L29">        int negative = EventCounter.getNegativeCount();</span>
+        
+<span class="fc" id="L31">        int score = (timeRemaining * 10) + (positive * 100) - (negative * 50);</span>
+<span class="fc bfc" id="L32" title="All 2 branches covered.">        if (score &lt; 0) score = 0;</span>
+
+        // NEW (AS2): Leaderboard Integration        
+<span class="fc bfc" id="L35" title="All 2 branches covered.">        if (leaderboardManager.isHighScore(score)) {</span>
+<span class="fc" id="L36">            game.setScreen(this.createNameInputScreen(game, score));</span>
+        } else {
+<span class="fc" id="L38">            game.setScreen(this.createWinScreen(game, score));</span>
+        }
+        
+<span class="fc" id="L41">        return true;</span>
+    }
+
+    // NEW (AS2): Added functions for screen setting to support unit testing
+    public NameInputScreen createNameInputScreen(YettiGame game, int score) {
+<span class="nc" id="L46">        return new NameInputScreen(game, score);</span>
+    }
+
+    public WinScreen createWinScreen(YettiGame game, int score) {
+<span class="nc" id="L50">        return new WinScreen(game, score);</span>
+    }
+
+    @Override
+    public int getScoreModifier() {
+<span class="fc" id="L55">        return 0; </span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

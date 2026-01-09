@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LeaderboardScreen.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">headless</a> &gt; <a href="index.source.html" class="el_package">io.github.yetti_eng.screens</a> &gt; <span class="el_source">LeaderboardScreen.java</span></div><h1>LeaderboardScreen.java</h1><pre class="source lang-java linenums">package io.github.yetti_eng.screens;
+
+import java.util.ArrayList;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.ScreenUtils;
+
+import io.github.yetti_eng.LeaderboardManager;
+import io.github.yetti_eng.YettiGame;
+import static io.github.yetti_eng.YettiGame.scaled;
+
+/**
+ * NEW (Assessment 2): Displays the High Score Leaderboard to the user.
+ *
+ * This screen is a new addition required by the product brief to allow players to view
+ * the top 5 scores achieved in the game. It gets data from LeaderboardManager
+ * and renders it using the game's UI styling.
+ *
+ * Requirements:
+ * - UR_MAIN_MENU (Navigation to Leaderboard)
+ * - FR_LEADERBOARD_SCREEN (Displaying the top 5 names and scores)
+ */
+public class LeaderboardScreen implements Screen {
+    private final YettiGame game;
+    private final Stage stage;
+    private final LeaderboardManager leaderboardManager;
+
+    /**
+     * Initialises the Leaderboard screen.
+     *
+     * @param game The main game instance.
+     */
+<span class="nc" id="L41">    public LeaderboardScreen(final YettiGame game) {</span>
+<span class="nc" id="L42">        this.game = game;</span>
+<span class="nc" id="L43">        this.stage = new Stage(game.viewport, game.batch);</span>
+<span class="nc" id="L44">        this.leaderboardManager = new LeaderboardManager();</span>
+<span class="nc" id="L45">    }</span>
+
+    /**
+     * Called when this screen becomes the current screen.
+     *
+     * Sets up the UI stage:
+     * 1. Creates and positions the Title Label.
+     * 2. Fetches the sorted list of high scores from LeaderboardManager.
+     * 3. Iterates through the scores to create dynamic Labels for the Top 5.
+     * 4. Adds a &quot;Back&quot; button to return to the Main Menu.
+     */
+    @Override
+    public void show() {
+<span class="nc" id="L58">        Gdx.input.setInputProcessor(stage);</span>
+
+<span class="nc" id="L60">        Label titleLabel = new Label(&quot;Top 5 Scores&quot;, new Label.LabelStyle(game.font, Color.WHITE));</span>
+<span class="nc" id="L61">        titleLabel.setPosition(scaled(16) / 2, scaled(7.5f), Align.center);</span>
+<span class="nc" id="L62">        stage.addActor(titleLabel);</span>
+
+<span class="nc" id="L64">        ArrayList&lt;LeaderboardManager.ScoreEntry&gt; scores = leaderboardManager.fetchScores();</span>
+<span class="nc" id="L65">        float startY = 6.0f;</span>
+
+<span class="nc bnc" id="L67" title="All 2 branches missed.">        for (int i = 0; i &lt; scores.size(); i++) {</span>
+<span class="nc" id="L68">            LeaderboardManager.ScoreEntry entry = scores.get(i);</span>
+<span class="nc" id="L69">            String text =String.format(&quot;%d. %s - %d&quot;, i + 1, entry.name, entry.score);</span>
+            
+<span class="nc" id="L71">            Label scoreLabel = new Label(text, new Label.LabelStyle(game.fontBorderedSmall, Color.WHITE));</span>
+<span class="nc" id="L72">            scoreLabel.setPosition(scaled(16) / 2, scaled(startY - (i * 0.8f)), Align.center);</span>
+<span class="nc" id="L73">            stage.addActor(scoreLabel);</span>
+        }
+
+        // Button to get back to the main menu
+<span class="nc" id="L77">        TextButton.TextButtonStyle style = new TextButton.TextButtonStyle(null, null, null, game.font);</span>
+<span class="nc" id="L78">        TextButton backButton = new TextButton(&quot;Back&quot;, style);</span>
+<span class="nc" id="L79">        backButton.setPosition(scaled(16) / 2, scaled(1.0f), Align.center);</span>
+<span class="nc" id="L80">        backButton.addListener(new InputListener() {</span>
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+<span class="nc" id="L83">                game.setScreen(new MenuScreen(game));</span>
+<span class="nc" id="L84">                dispose();</span>
+<span class="nc" id="L85">                return true;</span>
+            }
+        });
+<span class="nc" id="L88">        stage.addActor(backButton);</span>
+<span class="nc" id="L89">    }</span>
+
+    /**
+     * Renders the background and the UI stage.
+     *
+     * @param delta The time in seconds since the last render.
+     */
+    @Override
+    public void render(float delta) {
+<span class="nc" id="L98">        ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);</span>
+<span class="nc" id="L99">        game.viewport.apply();</span>
+<span class="nc" id="L100">        stage.draw();</span>
+<span class="nc" id="L101">    }</span>
+
+    /**
+     * Updates the UI viewport dimensions.
+     * @param width The new width in pixels.
+     * @param height The new height in pixels.
+     */
+    @Override
+    public void resize(int width, int height) {
+<span class="nc" id="L110">        game.viewport.update(width, height, true);</span>
+<span class="nc" id="L111">    }</span>
+
+    @Override
+<span class="nc" id="L114">    public void pause() {}</span>
+
+    @Override
+<span class="nc" id="L117">    public void resume() {}</span>
+
+    @Override
+<span class="nc" id="L120">    public void hide() {}</span>
+
+    /**
+     * Releases all resources used by the screen.
+     */
+    @Override
+    public void dispose() {
+<span class="nc" id="L127">        stage.dispose();</span>
+<span class="nc" id="L128">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

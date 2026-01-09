@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SocialSec.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">headless</a> &gt; <a href="index.source.html" class="el_package">io.github.yetti_eng.entities</a> &gt; <span class="el_source">SocialSec.java</span></div><h1>SocialSec.java</h1><pre class="source lang-java linenums">package io.github.yetti_eng.entities;
+
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
+
+import io.github.yetti_eng.EventCounter;
+import io.github.yetti_eng.MapManager;
+import io.github.yetti_eng.screens.GameScreen;
+
+/**
+ * Represents a &quot;Social Sec&quot; NPC that wanders the bottom left of the map.
+ * Interacting with them results in a time penalty for the player.
+ */
+public class SocialSec extends Entity {
+
+    /** Timer tracks when the NPC should next change direction. */
+<span class="nc" id="L18">    private float changeDirectionTimer = 0;</span>
+    /** Tracks if the NPC has already triggered their time-wasting event. */
+<span class="nc" id="L20">    private boolean hasWastedTime = false;</span>
+
+    /**
+     * Initialises the Social Sec entity.
+     * @param tex The texture for the NPC sprite.
+     * @param x The starting X-coordinate.
+     * @param y The starting Y-coordinate.
+     */
+    public SocialSec(Texture tex, float x, float y) {
+<span class="nc" id="L29">        super(tex, x, y, 1.5f, 1.5f, 3.5f, false); </span>
+<span class="nc" id="L30">        pickRandomDirection();</span>
+<span class="nc" id="L31">    }</span>
+
+    /**
+     * Updates the NPC's wandering behaviour.
+     * @param delta The time in seconds since the last update.
+     * @param mapManager Used to check for collisions with the environment.
+     */
+    public void wander(float delta, MapManager mapManager) {
+<span class="nc" id="L39">        changeDirectionTimer -= delta;</span>
+
+<span class="nc bnc" id="L41" title="All 2 branches missed.">        if (changeDirectionTimer &lt;= 0) {</span>
+<span class="nc" id="L42">            pickRandomDirection();</span>
+        }
+
+<span class="nc" id="L45">        float oldX = getX();</span>
+<span class="nc" id="L46">        float oldY = getY();</span>
+
+<span class="nc" id="L48">        doMove(delta);</span>
+
+<span class="nc bnc" id="L50" title="All 2 branches missed.">        if (mapManager.isRectInvalid(getHitbox())) {</span>
+<span class="nc" id="L51">            setPosition(oldX, oldY);</span>
+<span class="nc" id="L52">            pickRandomDirection();</span>
+        }
+<span class="nc" id="L54">    }</span>
+
+    /**
+     * Selects a new random movement direction and sets a random duration.
+     */
+    private void pickRandomDirection() {
+<span class="nc" id="L60">        float angle = MathUtils.random(0f, 360f);</span>
+<span class="nc" id="L61">        Vector2 dir = new Vector2(1, 0).setAngleDeg(angle);</span>
+        
+<span class="nc" id="L63">        resetMovement();</span>
+<span class="nc" id="L64">        addMovement(dir.x, dir.y);</span>
+<span class="nc" id="L65">        changeDirectionTimer = MathUtils.random(1.0f, 3.0f);</span>
+<span class="nc" id="L66">    }</span>
+
+    /**
+     * Checks if the NPC interacts with the player.
+     * If the interaction hasn't occurred yet, reduces the game timer.
+     * @param screen The current game screen.
+     * @return true if a time-wasting interaction was triggered.
+     */
+    public boolean checkInteraction(GameScreen screen) {
+<span class="nc bnc" id="L75" title="All 2 branches missed.">        if (!hasWastedTime) {</span>
+<span class="nc" id="L76">            hasWastedTime = true;</span>
+            
+<span class="nc" id="L78">            EventCounter.incrementNegative();</span>
+            
+<span class="nc" id="L80">            screen.spawnInteractionMessage(&quot;A social sec wasted your time discussing a social&quot;);</span>
+            
+<span class="nc" id="L82">            screen.getGame().timer.reduceTime(30); </span>
+            
+<span class="nc" id="L84">            return true;</span>
+        }
+<span class="nc" id="L86">        return false;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

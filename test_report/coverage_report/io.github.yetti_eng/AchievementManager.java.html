@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AchievementManager.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">headless</a> &gt; <a href="index.source.html" class="el_package">io.github.yetti_eng</a> &gt; <span class="el_source">AchievementManager.java</span></div><h1>AchievementManager.java</h1><pre class="source lang-java linenums">package io.github.yetti_eng;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
+
+<span class="nc" id="L9">public class AchievementManager {</span>
+    private static final String FILENAME = &quot;achievements.txt&quot;;
+    private static List&lt;Achievement&gt; achievements;
+    
+    private static void loadAchievements() {
+<span class="fc" id="L14">        FileHandle file = Gdx.files.local(FILENAME);</span>
+
+<span class="pc bpc" id="L16" title="1 of 2 branches missed.">        if (!file.exists()) throw new RuntimeException(FILENAME + &quot; doesn't exist.&quot;);</span>
+
+<span class="fc" id="L18">        achievements = new ArrayList&lt;Achievement&gt;();</span>
+
+<span class="fc bfc" id="L20" title="All 2 branches covered.">        for (String line: file.readString().split(&quot;\\r?\\n&quot;)) {</span>
+<span class="fc" id="L21">            String[] parts = line.split(&quot;,&quot;);</span>
+<span class="pc bpc" id="L22" title="1 of 2 branches missed.">            if (parts.length != 3) throw new RuntimeException(&quot;Invalid achievements file.&quot;);</span>
+<span class="fc" id="L23">            achievements.add(new Achievement(</span>
+<span class="fc" id="L24">                parts[0].trim(),</span>
+<span class="fc" id="L25">                parts[1].trim(),</span>
+<span class="fc" id="L26">                Boolean.parseBoolean(parts[2].trim())</span>
+            ));
+        }
+<span class="fc" id="L29">    }</span>
+
+    /**
+     * Loads achievements from achievements.txt and returns a list of
+     * Achievement instances containing the loaded data.
+     * @return the list of Achievements
+     */
+    public static List&lt;Achievement&gt; getAchievements() {
+<span class="fc" id="L37">        loadAchievements();</span>
+<span class="fc" id="L38">        return achievements;</span>
+    }
+
+    private static String getAchievementsString() {
+<span class="fc" id="L42">        List&lt;String&gt; achievementStrings = new ArrayList&lt;String&gt;();</span>
+<span class="fc bfc" id="L43" title="All 2 branches covered.">        for (Achievement a: achievements) {</span>
+<span class="fc" id="L44">            achievementStrings.add(a.toString());</span>
+<span class="fc" id="L45">        }</span>
+<span class="fc" id="L46">        return String.join(&quot;\r\n&quot;, achievementStrings);</span>
+    }
+
+    private static void saveAchievements() {
+<span class="fc" id="L50">        FileHandle file = Gdx.files.local(FILENAME);</span>
+
+<span class="pc bpc" id="L52" title="1 of 2 branches missed.">        if (!file.exists()) throw new RuntimeException(FILENAME + &quot; doesn't exist.&quot;);</span>
+
+<span class="fc" id="L54">        file.writeString(getAchievementsString(), false);</span>
+<span class="fc" id="L55">    }</span>
+
+    /**
+     * Unlocks the achievement at the given index in achievements.txt
+     * (sets third value to true). Updates achievements.txt to reflect this.
+     * @param index the line number in achievements.txt of the achievement
+     *              to unlock
+     */
+    public static void unlockAchievement(int index) {
+<span class="fc bfc" id="L64" title="All 2 branches covered.">        if (achievements == null) {</span>
+<span class="fc" id="L65">            loadAchievements();</span>
+        }
+<span class="fc" id="L67">        achievements.get(index).unlock();</span>
+<span class="fc" id="L68">        saveAchievements();</span>
+<span class="fc" id="L69">    }</span>
+    
+    /**
+     * Resets all achievements in achievements.txt (sets the third value on
+     * each line to false). Updates achievements.txt to reflect this.
+     */
+    public static void resetAchievements() {
+<span class="pc bpc" id="L76" title="1 of 2 branches missed.">        if (achievements == null) {</span>
+<span class="nc" id="L77">            loadAchievements();</span>
+        }
+<span class="fc bfc" id="L79" title="All 2 branches covered.">        for (Achievement a : achievements) {</span>
+<span class="fc" id="L80">            a.reset();</span>
+<span class="fc" id="L81">        }</span>
+<span class="fc" id="L82">        saveAchievements();</span>
+<span class="fc" id="L83">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

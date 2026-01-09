@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AchievementsScreen.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">headless</a> &gt; <a href="index.source.html" class="el_package">io.github.yetti_eng.screens</a> &gt; <span class="el_source">AchievementsScreen.java</span></div><h1>AchievementsScreen.java</h1><pre class="source lang-java linenums">package io.github.yetti_eng.screens;
+
+import java.util.List;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.ScreenUtils;
+
+import io.github.yetti_eng.Achievement;
+import io.github.yetti_eng.AchievementManager;
+import io.github.yetti_eng.YettiGame;
+import static io.github.yetti_eng.YettiGame.scaled;
+
+/**
+ * Screen that displays the player's achievements and their unlocked status.
+ * Features a scrollable list of achievements.
+ */
+public class AchievementsScreen implements Screen {
+
+    /** The main game instance. */
+    private final YettiGame game;
+    /** The stage containing UI actors. */
+    private Stage stage;
+    /** Scrollable pane for the achievement list. */
+    private ScrollPane scrollPane;
+
+    /**
+     * Initialises the achievements screen.
+     * @param game The main game instance.
+     */
+<span class="nc" id="L41">    public AchievementsScreen(YettiGame game) {</span>
+<span class="nc" id="L42">        this.game = game;</span>
+<span class="nc" id="L43">    }</span>
+
+    /**
+     * Called when this screen becomes the current screen.
+     * Sets up the layout, title, achievement list, and back button.
+     */
+    @Override
+    public void show() {
+<span class="nc" id="L51">        stage = new Stage(game.viewport, game.batch);</span>
+<span class="nc" id="L52">        Gdx.input.setInputProcessor(stage);</span>
+
+<span class="nc" id="L54">        Table mainTable = new Table();</span>
+<span class="nc" id="L55">        mainTable.setFillParent(true);</span>
+
+<span class="nc" id="L57">        Label title = new Label(&quot;Achievements&quot;, new Label.LabelStyle(game.font, Color.WHITE));</span>
+<span class="nc" id="L58">        mainTable.add(title).pad(scaled(0.5f)).top().row();</span>
+
+<span class="nc" id="L60">        Table listTable = new Table();</span>
+<span class="nc" id="L61">        listTable.top();</span>
+
+<span class="nc" id="L63">        loadAchievements(listTable);</span>
+
+<span class="nc" id="L65">        ScrollPane.ScrollPaneStyle scrollStyle = new ScrollPane.ScrollPaneStyle();</span>
+<span class="nc" id="L66">        scrollPane = new ScrollPane(listTable, scrollStyle);</span>
+<span class="nc" id="L67">        scrollPane.setScrollingDisabled(true, false);</span>
+        
+<span class="nc" id="L69">        mainTable.add(scrollPane).expand().fill().padBottom(scaled(2.0f)).row();</span>
+
+<span class="nc" id="L71">        stage.addActor(mainTable);</span>
+
+<span class="nc" id="L73">        TextButton.TextButtonStyle style = new TextButton.TextButtonStyle(null, null, null, game.font);</span>
+<span class="nc" id="L74">        TextButton backButton = new TextButton(&quot;Back&quot;, style);</span>
+        
+<span class="nc" id="L76">        backButton.setPosition(scaled(16) / 2, scaled(1.0f), Align.center);</span>
+        
+<span class="nc" id="L78">        backButton.addListener(new InputListener() {</span>
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+<span class="nc" id="L81">                game.setScreen(new MenuScreen(game));</span>
+<span class="nc" id="L82">                dispose();</span>
+<span class="nc" id="L83">                return true;</span>
+            }
+        });
+<span class="nc" id="L86">        stage.addActor(backButton);</span>
+<span class="nc" id="L87">    }</span>
+
+    /**
+     * Fetches achievements from the manager and populates the UI table.
+     * Includes the &quot;Graduate&quot; achievement if all others are unlocked.
+     * @param table The table to add achievement labels to.
+     */
+    private void loadAchievements(Table table) {
+<span class="nc" id="L95">        List&lt;Achievement&gt; achievements = AchievementManager.getAchievements();</span>
+        
+<span class="nc" id="L97">        boolean allUnlocked = true;</span>
+
+<span class="nc bnc" id="L99" title="All 2 branches missed.">        for (Achievement a: achievements) {</span>
+<span class="nc bnc" id="L100" title="All 2 branches missed.">            if (!a.getUnlocked()) {</span>
+<span class="nc" id="L101">                allUnlocked = false;</span>
+            }
+<span class="nc" id="L103">            addAchievement(table, a.getName(), a.getDescription(), a.getUnlocked());</span>
+<span class="nc" id="L104">        }</span>
+
+<span class="nc" id="L106">        addAchievement(table, &quot;Graduate&quot;, &quot;Obtain all other achievements.&quot;, allUnlocked);</span>
+<span class="nc" id="L107">    }</span>
+
+    /**
+     * Adds a single achievement row to the list table.
+     * @param table The UI table to add to.
+     * @param name The name of the achievement.
+     * @param description The description of how to unlock it.
+     * @param unlocked Whether the achievement is currently unlocked.
+     */
+    private void addAchievement(Table table, String name, String description, boolean unlocked) {
+<span class="nc bnc" id="L117" title="All 2 branches missed.">        Color color = unlocked ? Color.GREEN : Color.RED;</span>
+        
+<span class="nc" id="L119">        Label.LabelStyle nameStyle = new Label.LabelStyle(game.fontMedium, color);</span>
+<span class="nc" id="L120">        Label.LabelStyle descStyle = new Label.LabelStyle(game.fontSmall, Color.WHITE);</span>
+
+<span class="nc" id="L122">        Label nameLabel = new Label(name, nameStyle);</span>
+<span class="nc" id="L123">        Label descLabel = new Label(description, descStyle);</span>
+<span class="nc" id="L124">        descLabel.setWrap(true);</span>
+<span class="nc" id="L125">        descLabel.setAlignment(Align.center);</span>
+
+<span class="nc" id="L127">        table.add(nameLabel).padTop(scaled(0.2f)).row();</span>
+<span class="nc" id="L128">        table.add(descLabel).width(game.viewport.getWorldWidth() * 0.8f).padBottom(scaled(0.2f)).row(); </span>
+<span class="nc" id="L129">    }</span>
+
+    /**
+     * Renders the achievements screen.
+     * Handles keyboard scrolling input for the achievement list.
+     * @param delta The time in seconds since the last render.
+     */
+    @Override
+    public void render(float delta) {
+<span class="nc" id="L138">        ScreenUtils.clear(0f, 0f, 0f, 1f);</span>
+
+<span class="nc" id="L140">        float scrollSpeed = scaled(5f); </span>
+        
+<span class="nc bnc" id="L142" title="All 2 branches missed.">        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {</span>
+<span class="nc" id="L143">            scrollPane.setScrollY(scrollPane.getScrollY() - scrollSpeed * delta);</span>
+        }
+<span class="nc bnc" id="L145" title="All 2 branches missed.">        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {</span>
+<span class="nc" id="L146">            scrollPane.setScrollY(scrollPane.getScrollY() + scrollSpeed * delta);</span>
+        }
+
+<span class="nc" id="L149">        stage.act(delta);</span>
+<span class="nc" id="L150">        stage.draw();</span>
+<span class="nc" id="L151">    }</span>
+
+    /**
+     * Updates the UI viewport dimensions.
+     * @param width The new width in pixels.
+     * @param height The new height in pixels.
+     */
+    @Override
+    public void resize(int width, int height) {
+<span class="nc" id="L160">        game.viewport.update(width, height, true);</span>
+<span class="nc" id="L161">    }</span>
+
+    @Override
+<span class="nc" id="L164">    public void pause() {}</span>
+
+    @Override
+<span class="nc" id="L167">    public void resume() {}</span>
+
+    @Override
+<span class="nc" id="L170">    public void hide() {}</span>
+
+    /**
+     * Releases resources used by the stage.
+     */
+    @Override
+    public void dispose() {
+<span class="nc" id="L177">        stage.dispose();</span>
+<span class="nc" id="L178">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

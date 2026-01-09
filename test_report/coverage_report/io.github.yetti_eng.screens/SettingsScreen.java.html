@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SettingsScreen.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">headless</a> &gt; <a href="index.source.html" class="el_package">io.github.yetti_eng.screens</a> &gt; <span class="el_source">SettingsScreen.java</span></div><h1>SettingsScreen.java</h1><pre class="source lang-java linenums">package io.github.yetti_eng.screens;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.ScreenUtils;
+
+import io.github.yetti_eng.AchievementManager;
+import io.github.yetti_eng.LeaderboardManager;
+import io.github.yetti_eng.YettiGame;
+import static io.github.yetti_eng.YettiGame.scaled;
+
+public class SettingsScreen implements Screen {
+    private final YettiGame game;
+    private final Stage stage;
+
+    private Slider volumeSlider;
+
+    private Texture sliderTexture;
+    private Texture knobTexture;
+
+<span class="nc" id="L34">    public SettingsScreen(final YettiGame game) {</span>
+<span class="nc" id="L35">        this.game = game;</span>
+<span class="nc" id="L36">        stage = new Stage(game.viewport, game.batch);</span>
+<span class="nc" id="L37">    }</span>
+
+    @Override
+    public void show() {
+<span class="nc" id="L41">        Gdx.input.setInputProcessor(stage);</span>
+
+<span class="nc" id="L43">        Table table = new Table();</span>
+<span class="nc" id="L44">        table.setFillParent(true);</span>
+<span class="nc" id="L45">        stage.addActor(table);</span>
+
+<span class="nc" id="L47">        sliderTexture = new Texture(&quot;ui/slider_background.png&quot;);</span>
+<span class="nc" id="L48">        knobTexture = new Texture(&quot;ui/slider_knob.png&quot;);</span>
+
+<span class="nc" id="L50">        Label.LabelStyle titleStyle = new Label.LabelStyle(game.font, Color.WHITE);</span>
+<span class="nc" id="L51">        Label titleLabel = new Label(&quot;Settings&quot;, titleStyle);</span>
+<span class="nc" id="L52">        titleLabel.setAlignment(Align.center);</span>
+
+<span class="nc" id="L54">        Label volumeLabel = new Label(&quot;Volume&quot;, new Label.LabelStyle(game.fontBorderedSmall, Color.WHITE));</span>
+        
+<span class="nc" id="L56">        volumeSlider = new Slider(0.0f, 1.0f, 0.01f, false,</span>
+            new Slider.SliderStyle(new TextureRegionDrawable(sliderTexture), new TextureRegionDrawable(knobTexture))
+        );
+<span class="nc" id="L59">        volumeSlider.setValue(game.volume);</span>
+<span class="nc" id="L60">        volumeSlider.addListener(new ChangeListener() {</span>
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+<span class="nc" id="L63">                game.volume = volumeSlider.getValue();</span>
+<span class="nc" id="L64">            }</span>
+        });
+
+<span class="nc" id="L67">        TextButton.TextButtonStyle buttonStyle = new TextButton.TextButtonStyle(null, null, null, game.font);</span>
+
+<span class="nc" id="L69">        TextButton resetButton = new TextButton(&quot;Reset Leaderboard&quot;, buttonStyle);</span>
+<span class="nc" id="L70">        resetButton.addListener(new InputListener() {</span>
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+<span class="nc" id="L73">                LeaderboardManager manager = new LeaderboardManager();</span>
+<span class="nc" id="L74">                manager.resetScores();</span>
+<span class="nc" id="L75">                Gdx.app.log(&quot;Settings&quot;, &quot;Leaderboard reset to defaults.&quot;);</span>
+<span class="nc" id="L76">                return true;</span>
+            }
+        });
+
+<span class="nc" id="L80">        TextButton menuButton = new TextButton(&quot;Return to Menu&quot;, buttonStyle);</span>
+<span class="nc" id="L81">        menuButton.addListener(new InputListener() {</span>
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+<span class="nc" id="L84">                game.setScreen(new MenuScreen(game));</span>
+<span class="nc" id="L85">                dispose();</span>
+<span class="nc" id="L86">                return true;</span>
+            }
+        });
+
+<span class="nc" id="L90">        TextButton resetAchievementsButton = new TextButton(&quot;Reset Achievements&quot;, buttonStyle);</span>
+<span class="nc" id="L91">        resetAchievementsButton.addListener(new InputListener() {</span>
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+<span class="nc" id="L94">                AchievementManager.resetAchievements();</span>
+<span class="nc" id="L95">                Gdx.app.log(&quot;Settings&quot;, &quot;Achievements reset to defaults.&quot;);</span>
+<span class="nc" id="L96">                return true;</span>
+            }
+        });
+
+<span class="nc" id="L100">        float gap = scaled(0.5f);</span>
+        
+<span class="nc" id="L102">        table.add(titleLabel).padBottom(gap).row();</span>
+<span class="nc" id="L103">        table.add(volumeLabel).padBottom(scaled(0.1f)).row();</span>
+<span class="nc" id="L104">        table.add(volumeSlider).width(scaled(8)).padBottom(gap).row(); </span>
+<span class="nc" id="L105">        table.add(resetButton).width(scaled(6)).padBottom(gap).row();</span>
+<span class="nc" id="L106">        table.add(resetAchievementsButton).width(scaled(6)).padBottom(gap).row();</span>
+<span class="nc" id="L107">        table.add(menuButton).padTop(scaled(0.5f));</span>
+<span class="nc" id="L108">    }</span>
+
+    /**
+     * Renders the settings screen elements.
+     *
+     * Clears the background and draws the Stage.
+     *
+     * @param delta The time in seconds since the last render.
+     */
+    @Override
+    public void render(float delta) {
+<span class="nc" id="L119">        ScreenUtils.clear(0.4f, 0.4f, 0.4f, 1f);</span>
+<span class="nc" id="L120">        game.viewport.apply();    </span>
+<span class="nc" id="L121">        stage.draw();</span>
+<span class="nc" id="L122">    }</span>
+
+    @Override
+    public void resize(int width, int height) {
+<span class="nc" id="L126">        game.viewport.update(width, height, true);</span>
+<span class="nc" id="L127">    }</span>
+
+    @Override
+<span class="nc" id="L130">    public void pause() {}</span>
+
+    @Override
+<span class="nc" id="L133">    public void resume() {}</span>
+
+    @Override
+<span class="nc" id="L136">    public void hide() {}</span>
+
+    @Override
+    public void dispose() {
+<span class="nc" id="L140">        stage.dispose();</span>
+<span class="nc" id="L141">        sliderTexture.dispose();</span>
+<span class="nc" id="L142">        knobTexture.dispose();</span>
+<span class="nc" id="L143">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

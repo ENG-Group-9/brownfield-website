@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SpeedBoostEvent.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">headless</a> &gt; <a href="index.source.html" class="el_package">io.github.yetti_eng.events</a> &gt; <span class="el_source">SpeedBoostEvent.java</span></div><h1>SpeedBoostEvent.java</h1><pre class="source lang-java linenums">package io.github.yetti_eng.events;
+
+import com.badlogic.gdx.utils.Timer;
+
+import io.github.yetti_eng.EventCounter;
+import io.github.yetti_eng.entities.Item;
+import io.github.yetti_eng.entities.Player;
+import io.github.yetti_eng.screens.GameScreen;
+
+/**
+ * Event representing a caffeine hit that boosts player speed.
+ */
+<span class="fc" id="L13">public class SpeedBoostEvent extends Event {</span>
+
+    /**
+     * Activates the speed boost event using a new Timer.
+     * @param screen The current game screen.
+     * @param player The player instance.
+     * @param item The coffee item collected.
+     * @return true if the event was successfully activated.
+     */
+    @Override
+    public boolean activate(final GameScreen screen, final Player player, Item item) {
+<span class="fc" id="L24">        return this.activate(screen, player, item, new Timer());</span>
+    }
+
+    /**
+     * Activates the speed boost event.
+     * Disables the item, plays a sound, and sets the player speed to 8.0 for 5 seconds.
+     * @param screen The current game screen.
+     * @param player The player instance.
+     * @param item The coffee item collected.
+     * @param timer The timer used to schedule the speed reset.
+     * @return true if the event was successfully activated.
+     */
+    public boolean activate(final GameScreen screen, final Player player, Item item, Timer timer) {
+<span class="fc bfc" id="L37" title="All 2 branches covered.">        if (!item.isUsed()) {</span>
+<span class="fc" id="L38">            EventCounter.incrementPositive();</span>
+
+<span class="fc" id="L40">            item.hide();</span>
+<span class="fc" id="L41">            item.disable();</span>
+
+<span class="fc" id="L43">            screen.getSipSfx().play(screen.getGame().volume);</span>
+
+<span class="fc" id="L45">            screen.spawnInteractionMessage(&quot;Caffeine Hit! (+Speed)&quot;);</span>
+
+<span class="fc" id="L47">            player.setSpeed(8f);</span>
+
+<span class="fc" id="L49">            timer.scheduleTask(new Timer.Task() {</span>
+                @Override
+                public void run() {
+<span class="fc" id="L52">                    player.setSpeed(Player.DEFAULT_SPEED);</span>
+<span class="fc" id="L53">                    screen.spawnInteractionMessage(&quot;The caffeine wore off.&quot;);</span>
+<span class="fc" id="L54">                }</span>
+            }, 5f);
+
+<span class="fc" id="L57">            return true;</span>
+        }
+<span class="fc" id="L59">        return false;</span>
+    }
+
+    /**
+     * Returns the score modifier for getting a speed boost.
+     * @return A positive integer representing the points gained.
+     */
+    @Override
+    public int getScoreModifier() {
+<span class="fc" id="L68">        return 100;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

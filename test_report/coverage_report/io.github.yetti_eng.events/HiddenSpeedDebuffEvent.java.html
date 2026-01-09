@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HiddenSpeedDebuffEvent.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">headless</a> &gt; <a href="index.source.html" class="el_package">io.github.yetti_eng.events</a> &gt; <span class="el_source">HiddenSpeedDebuffEvent.java</span></div><h1>HiddenSpeedDebuffEvent.java</h1><pre class="source lang-java linenums">package io.github.yetti_eng.events;
+
+import com.badlogic.gdx.utils.Timer;
+
+import io.github.yetti_eng.EventCounter;
+import io.github.yetti_eng.entities.Item;
+import io.github.yetti_eng.entities.Player;
+import io.github.yetti_eng.screens.GameScreen;
+
+/**
+ * A hidden event representing a loose floorboard that the player trips on.
+ * Reduces the player's speed temporarily and deducts points.
+ */
+<span class="fc" id="L14">public class HiddenSpeedDebuffEvent extends Event {</span>
+
+    /**
+     * Activates the hidden speed debuff event using a new Timer.
+     * @param screen The current game screen.
+     * @param player The player instance.
+     * @param item The floorboard item triggered.
+     * @return true if the event was successfully activated.
+     */
+    @Override
+    public boolean activate(final GameScreen screen, final Player player, Item item) {
+<span class="fc" id="L25">        return this.activate(screen, player, item, new Timer());</span>
+    }
+
+    /**
+     * Activates the hidden speed debuff event.
+     * Triggers sound effects, reveals the floorboard, and sets a temporary speed penalty.
+     * @param screen The current game screen.
+     * @param player The player instance.
+     * @param item The floorboard item triggered.
+     * @param timer The timer used to schedule the speed recovery.
+     * @return true if the event was successfully activated.
+     */
+    public boolean activate(final GameScreen screen, final Player player, Item item, Timer timer) {
+        // Only trigger if the item hasn't been used yet
+<span class="fc bfc" id="L39" title="All 2 branches covered.">        if (!item.isUsed()) {</span>
+<span class="fc" id="L40">            EventCounter.incrementHidden();</span>
+<span class="fc" id="L41">            EventCounter.incrementNegative();</span>
+            
+            // Reveal the item (the loose floorboard) so the player knows what happened
+<span class="fc" id="L44">            item.show(); </span>
+            
+            // Play a sound effect
+<span class="fc" id="L47">            screen.getFloorboardSfx().play(screen.getGame().volume);            </span>
+<span class="fc" id="L48">            screen.spawnInteractionMessage(&quot;Stumbled on a loose floorboard! (-Speed)&quot;);</span>
+
+            // Apply Slow Effect: Set speed to 2.0
+<span class="fc" id="L51">            player.setSpeed(2f);</span>
+
+            // Schedule the reset of the speed after 3 seconds
+<span class="fc" id="L54">            timer.scheduleTask(new Timer.Task() {</span>
+                @Override
+                public void run() {
+<span class="fc" id="L57">                    player.setSpeed(Player.DEFAULT_SPEED);</span>
+<span class="fc" id="L58">                    screen.spawnInteractionMessage(&quot;You recovered your balance.&quot;);</span>
+<span class="fc" id="L59">                }</span>
+            }, 3f);
+
+<span class="fc" id="L62">            return true;</span>
+        }
+<span class="fc" id="L64">        return false; // Item already used</span>
+    }
+
+    /**
+     * Returns the score modifier for &quot;tripping&quot;.
+     * @return A negative integer representing the penalty.
+     */
+    @Override
+    public int getScoreModifier() {
+<span class="fc" id="L73">        return -50; </span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
